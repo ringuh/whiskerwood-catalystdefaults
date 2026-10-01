@@ -1,0 +1,26 @@
+"workshopitem"
+{
+	"appid"		"2489330"
+	"publishedfileid"		"0"
+	"contentfolder"		"E:\modding\whiskerwood-catalystdefaults\workshop\content"
+	"previewfile"		"E:\modding\whiskerwood-catalystdefaults\docs\screenshot.png"
+	"title"		"CatalystDefaults - Catalyst on for new production buildings"
+	"description"		"[b]Stop flipping the Catalyst switch on every new building.[/b]
+
+Production buildings with a Catalyst slot (smelters, furnaces and the like) start with their Catalyst switched on as soon as construction finishes.
+
+[h2]Features[/h2]
+[list]
+[*]Setting [i]Production buildings - Catalyst on when built[/i] in the Mods menu (On / Off, default On)
+[*]Applies only to buildings finished while the mod is active
+[*]Never touches buildings that already exist in your save
+[*]Uses the game's own Catalyst command, the same as the switch in the building window
+[*]Event-driven: does nothing until a construction finishes, never scans all buildings, so it costs nothing at high game speeds or in big towns
+[/list]
+
+[h2]Source[/h2]
+[url=https://github.com/ringuh/whiskerwood-catalystdefaults]GitHub[/url]
+
+Created using the [url=https://github.com/Whiskerwood-Modding/Whiskerwood-Project]Whiskerwood modkit[/url]."
+	"changenote"		"First release"
+}
