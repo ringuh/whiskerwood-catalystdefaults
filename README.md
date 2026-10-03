@@ -8,7 +8,7 @@ Production buildings with a Catalyst slot start with the Catalyst switched **off
 
 ## Features
 
-- **One setting**: *Production buildings - Catalyst on when built* in the Mods menu, On / Off (default **On**).
+- **One setting**: *Catalyst on by default* in the Mods menu, On / Off (default **On**).
 - **New buildings only**: buildings finished while the mod is active. Buildings that already exist when a save loads are never looked at or changed.
 - **Uses the game's own command**: the same one the Catalyst switch in the building window sends, so nothing is patched.
 - **Event-driven, no polling, no full scans**: the mod sleeps until a construction finishes. Houses, walls, belts and other non-production buildings are dropped after one data-table lookup. For a production building it lists only buildings of that one type and picks the one standing on the finished construction's cell. It costs nothing at 20× speed or in a town with thousands of buildings.

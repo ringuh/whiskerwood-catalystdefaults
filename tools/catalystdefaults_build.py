@@ -212,7 +212,7 @@ vals.pin('Array', ARR(STR), out=True)
 vals.pin('[0]', STR, default='On'); vals.pin('[1]', STR, default='Off')
 reg = api_call(g, 'RegisterModOptions', 600, 0, name='Reg',
                optionId=OPT_ID,
-               optionDisplayName='Production buildings - Catalyst on when built',
+               optionDisplayName='Catalyst on by default',
                DefaultValue='On',
                optionDescription='When a production building with a Catalyst slot is finished, its Catalyst switch is turned on. '
                                  'Buildings that already exist are never changed. Game default is Off.')

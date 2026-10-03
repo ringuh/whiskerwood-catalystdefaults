@@ -11,7 +11,7 @@ Production buildings with a Catalyst slot (smelters, furnaces and the like) star
 
 [h2]Features[/h2]
 [list]
-[*]Setting [i]Production buildings - Catalyst on when built[/i] in the Mods menu (On / Off, default On)
+[*]Setting [i]Catalyst on by default[/i] in the Mods menu (On / Off, default On)
 [*]Applies only to buildings finished while the mod is active
 [*]Never touches buildings that already exist in your save
 [*]Uses the game's own Catalyst command, the same as the switch in the building window
@@ -22,5 +22,5 @@ Production buildings with a Catalyst slot (smelters, furnaces and the like) star
 [url=https://github.com/ringuh/whiskerwood-catalystdefaults]GitHub[/url]
 
 Created using the [url=https://github.com/Whiskerwood-Modding/Whiskerwood-Project]Whiskerwood modkit[/url]."
-	"changenote"		"First release"
+	"changenote"		"1.1: The Mods menu now shows the right setting, 'Catalyst on by default' (On / Off). Version 1.0 showed an unrelated heater temperature setting by mistake and the mod could not be switched off."
 }
