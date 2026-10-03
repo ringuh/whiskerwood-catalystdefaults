@@ -32,7 +32,7 @@ Production buildings with a Catalyst slot start with the Catalyst switched **off
 
 ## Building from source
 
-1. Set up the official [Whiskerwood modkit](https://github.com/Whiskerwood-Modding/Whiskerwood-Project) (custom UE 5.6 build, see its README).
+1. Set up the official [Whiskerwood modkit](https://github.com/Whiskerwood-Modding/Whiskerwood-Project) (custom UE 5.8 build, see its README; the mod is built for the UE 5.8 version of the game).
 2. Copy `Mod/CatalystDefaults/` from this repo to `Content/Mods/CatalystDefaults/` in the modkit project.
 3. Open the project, right-click the `CatalystDefaults` folder → **Cook & Install** (Mod Tools). The mod uses pak chunk 23 (`PAL_CatalystDefaults`).
 4. After editing in the editor, run `sync-from-modkit.bat` to copy the changed assets back into `Mod/CatalystDefaults/`, then commit.

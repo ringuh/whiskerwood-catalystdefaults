@@ -2,5 +2,6 @@
 	"Name": "CatalystDefaults",
 	"Description": "Newly built production buildings start with their Catalyst switched on. Toggle it in the Mods settings menu.",
 	"Version": "1.0",
-	"CreatedBy": "rinku"
+	"CreatedBy": "rinku",
+	"EngineVersion": "5.8"
 }
