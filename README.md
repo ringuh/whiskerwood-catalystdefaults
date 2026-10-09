@@ -56,6 +56,8 @@ Production buildings with a Catalyst slot start with the Catalyst switched **off
   | `PendPos` | String, **array** |
   | `PendLoc` | Vector, **array** |
   | `PendTries` | Integer, **array** |
+  | `Ready` | Boolean |
+  | `SetupTries` | Integer |
 
 - If a red event wire (OnConstruction, OnSiteGone, OnBuilt → its *Bind Event* node) pastes unconnected, drag it again. Same for the *Cast To Actor Class* output into *Add (PendClass)*.
 
@@ -64,7 +66,7 @@ Production buildings with a Catalyst slot start with the Catalyst switched **off
 | Asset | Role |
 |---|---|
 | `BP_Startup` | Runs once at the main menu and registers the mod option `CatalystDefaults_On`. |
-| `BP_MapLoad` | Runs when a save loads. It binds the mod API events and handles newly finished buildings (below). |
+| `BP_MapLoad` | Runs when a game starts or a save loads. It binds the mod API events and handles newly finished buildings (below). |
 | `PAL_CatalystDefaults` | Primary Asset Label that puts the mod into its own pak chunk. |
 
 - A building's Catalyst switch is `Industry.m_allowCatalysts`. The building window class (`IndustryDetails`) accepts a `setCatalystUse` action. `BP_MapLoad` keeps one invisible `IndustryDetails`, points its `Context` at the building with `SetObjectPropertyByName` (the property isn't Blueprint-writable) and sends the action.
@@ -77,16 +79,22 @@ Production buildings with a Catalyst slot start with the Catalyst switched **off
 
 ## Debug logging
 
-The mod logs nothing by default. To see what it does, create a `debug.txt` next to the pak containing any text (e.g. `1`; an empty file counts as off):
-`%localappdata%\Whiskerwood\Saved\mods\CatalystDefaults\debug.txt`.
-It is read once when a save finishes loading. Then `%localappdata%\Whiskerwood\Saved\Logs\modlog.txt` gets a line at load (which table is used),
+The mod logs nothing by default. To see what it does, create a `debug.txt` containing any text (e.g. `1`; an empty file counts as off):
+`%localappdata%\Whiskerwood\Saved\mods\CatalystDefaultsConfig\debug.txt`.
+It has its own folder because Cook & Install and Workshop updates replace the mod's folder. It is read once when a game starts or a save loads. Then `%localappdata%\Whiskerwood\Saved\Logs\modlog.txt` gets a line at load (which table is used),
 for every finished production construction, for every catalyst switched on, and for any construction it couldn't match.
-The Workshop upload never contains `debug.txt`, so published copies stay silent.
+The Workshop upload never contains the Config folder, so published copies stay silent.
 
 ## Known limitations
 
 - Changing the setting applies only to buildings finished after the change.
 - If a game update renames the building table (mod API name `GridDefsSync`), the mod does nothing; with `debug.txt` it logs the table names the game knows.
+
+## Version history
+
+- **1.2** – works in a new game too. Before, constructed buildings were only handled after loading a save (the building table was looked up only when a save finished loading). Debug switch moved to `CatalystDefaultsConfig\debug.txt`.
+- **1.1** – the Mods menu shows the right setting (1.0 showed an unrelated heater setting).
+- **1.0** – first release.
 
 ## Credits
 

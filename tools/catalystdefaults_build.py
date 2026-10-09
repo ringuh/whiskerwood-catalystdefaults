@@ -222,7 +222,8 @@ open(OUT + '/BP_Startup.txt', 'w', encoding='utf-8').write(g.text())
 
 # =========================================================================== BP_MapLoad
 # Variables: Debug (Boolean), View (IndustryDetails ref), Cur (Actor ref), TableName (Name), AnyLeft (Boolean),
-#            PendClass (Actor Class Reference ARRAY), PendPos (String array), PendLoc (Vector array), PendTries (Integer array)
+#            PendClass (Actor Class Reference ARRAY), PendPos (String array), PendLoc (Vector array), PendTries (Integer array),
+#            Ready (Boolean), SetupTries (Integer)  <- 1.2 setup guard
 g = Graph(MAPLOAD)
 
 # ---- BeginPlay: bind events, find the building table
@@ -237,8 +238,33 @@ b2 = bind(g, api['ReturnValue'], API, 'onBuildingSpawned', '/Script/SystemCore',
 evL = g.custom_event('OnLoaded', [], 0, -2900)
 b0 = bind(g, api['ReturnValue'], API, 'onLoadingFinished', '/Script/SystemCore', 'ModAPI_OnEvent__DelegateSignature', evL, 1000, -2400, 'BindLoaded'); ex(b2, b0)
 # table lookup after loading (data tables may not be registered yet at BeginPlay)
-# Debug = a debug.txt (any content) exists in Saved\\mods\\<MODNAME>\\ next to the pak. Published builds ship without it.
-rdf = api_call(g, 'ReadModTextFile', 200, -3200, name='ReadDebugFile', modName=MODNAME, Filename='debug.txt'); ex(evL, rdf)
+# ---- Setup guard (1.2): a NEW game doesn't deliver onLoadingFinished to BP_MapLoad (so TableName stayed None and
+#      constructed buildings were never handled). BeginPlay (after the binds) and OnLoaded enter the same guard:
+#      Ready -> nothing; a building table registered OR 10 tries used -> Ready = true -> setup once
+#      (debug + table lookup, which still logs the known tables if none is found); else one-shot 1 s timer back
+#      into OnLoaded.
+gr = g.branch(1300, -2400, 'BrReady'); link(g.get('Ready', BOOL, 1150, -2250, name='ReadyGet')['Ready'], gr['Condition'])
+ex(b0, gr); ex(evL, gr)
+gh = []; gprev = (gr, 'else')
+for i, tname in enumerate(TABLES):
+    h_ = api_call(g, 'HasDataTable', 1550 + 250 * i, -2400, name='GuardHasTable%d' % i, datatableName=tname); ex(gprev[0], h_, gprev[1])
+    gh.append(h_['ReturnValue']); gprev = (h_, 'then')
+anyT = gh[0]
+for i, pin in enumerate(gh[1:]):
+    o_ = g.call(KML + ':BooleanOR', 'GuardAnyTable%d' % i, 1700 + 200 * i, -2150); link(anyT, o_['A']); link(pin, o_['B']); anyT = o_['ReturnValue']
+stg0 = g.get('SetupTries', INT, 1700, -2000, name='SetupTriesGet')
+used = g.call(KML + ':GreaterEqual_IntInt', 'SetupTriesUsed', 1900, -2000, B='10'); link(stg0['SetupTries'], used['A'])
+gok = g.call(KML + ':BooleanOR', 'GuardOk', 2100, -2100); link(anyT, gok['A']); link(used['ReturnValue'], gok['B'])
+gp = g.branch(2100, -2400, 'BrCanSetup'); link(gok['ReturnValue'], gp['Condition']); ex(gprev[0], gp, gprev[1])
+srd = g.setv('Ready', BOOL, 2350, -2400, value='true', name='SetReady'); ex(gp, srd)
+sta = g.call(KML + ':Add_IntInt', 'SetupTriesPlus', 2400, -1950, B='1'); link(stg0['SetupTries'], sta['A'])
+sst = g.setv('SetupTries', INT, 2350, -2150, name='SetSetupTries'); link(sta['ReturnValue'], sst['SetupTries']); ex(gp, sst, 'else')
+stm = g.call(KSL + ':K2_SetTimer', 'RetrySetup', 2600, -2150, FunctionName='OnLoaded', Time='1.000000', bLooping='false')
+stn = g.add(BG + 'K2Node_Self', 'MeSetupTimer', [], 2450, -2000); stn.pin('self', T('object', sub='self'), out=True); link(stn['self'], stm['Object'])
+ex(sst, stm)
+
+# Debug = Saved\mods\CatalystDefaultsConfig\debug.txt (any text). ReadModTextFile adds '.txt' itself.
+rdf = api_call(g, 'ReadModTextFile', 200, -3200, name='ReadDebugFile', modName=MODNAME + 'Config', Filename='debug'); ex(srd, rdf)
 dfe = g.call(KSTR + ':IsEmpty', 'DebugFileEmpty', 450, -3050); link(rdf['ReturnValue'], dfe['InString'])
 dfn = g.call(KML + ':Not_PreBool', 'DebugFileThere', 650, -3050); link(dfe['ReturnValue'], dfn['A'])
 sdb = g.setv('Debug', BOOL, 500, -3200, name='SetDebug'); link(dfn['ReturnValue'], sdb['Debug']); ex(rdf, sdb)
